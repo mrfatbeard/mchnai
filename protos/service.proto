@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package example;
+
+service Greeter {
+  rpc SayHelloStream(NumMessagesRequest) returns (stream StringReply);
+}
+
+message NumMessagesRequest {
+  int32 num_messages = 1;
+}
+
+message StringReply {
+  string message = 1;
+}
