@@ -37,6 +37,11 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    dependencies {
+        implementation("com.google.protobuf:protobuf-java:4.30.1")
+        implementation("com.google.protobuf:protobuf-kotlin:4.30.1")
+    }
 }
 
 flutter {

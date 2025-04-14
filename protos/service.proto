@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option java_package = "com.example.mchnai";
+
 service HelloService {
     rpc sayHelloStream(NumMessages) returns (stream StringMessage);
 }

@@ -66,7 +66,9 @@ class HelloServiceImpl extends HelloServiceBase {
   @override
   Stream<StringMessage> sayHelloStream(ServiceCall call, NumMessages request) {
     final EventChannel e = EventChannel('com.example.grpc/event');
-    return e.receiveBroadcastStream().map((e) => StringMessage(message: e));
+    // в идеале в стрим со стороны натива будут приходить сериализованные протки,
+    // так что в map() достаточно будет сделать StringMessage.fromBuffer(e)
+    return e.receiveBroadcastStream(request.writeToBuffer()).map((e) => StringMessage.fromBuffer(e));
   }
 }
 

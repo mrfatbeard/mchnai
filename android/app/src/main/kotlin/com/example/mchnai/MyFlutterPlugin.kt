@@ -1,5 +1,6 @@
 package com.example.mchnai
 
+import com.google.protobuf.CodedOutputStream
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
@@ -61,12 +62,14 @@ class MyFlutterPlugin : FlutterPlugin, CoroutineScope {
 
 // создаем свой хендлер для каждого стримового метода
 class HelloStreamHandler() : EventChannel.StreamHandler, CoroutineScope {
-    override fun onListen(p0: Any?, p1: EventChannel.EventSink?) {
+    override fun onListen(args: Any?, sink: EventChannel.EventSink?) {
         launch {
-            p1?.run {
-                sendMessage("1")
-                sendMessage("2")
-                sendMessage("3")
+            val request = Service.NumMessages.parseFrom(args as ByteArray)
+            sink?.run {
+                (0..request.count).forEach {
+                    sendMessage("$it")
+                    delay(500)
+                }
                 sendDone()
             }
         }
@@ -80,7 +83,9 @@ class HelloStreamHandler() : EventChannel.StreamHandler, CoroutineScope {
         get() = Dispatchers.IO
 
     suspend fun EventChannel.EventSink.sendMessage(message: String) = withContext(Dispatchers.Main) {
-        success(message)
+        success(stringMessage {
+            this.message = message
+        }.toByteArray())
     }
 
     suspend fun EventChannel.EventSink.sendDone() = withContext(Dispatchers.Main) { endOfStream() }
