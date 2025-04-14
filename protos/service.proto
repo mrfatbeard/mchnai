@@ -1,15 +1,13 @@
 syntax = "proto3";
 
-package example;
-
-service Greeter {
-  rpc SayHelloStream(NumMessagesRequest) returns (stream StringReply);
+service HelloService {
+    rpc sayHelloStream(NumMessages) returns (stream StringMessage);
 }
 
-message NumMessagesRequest {
-  int32 num_messages = 1;
+message NumMessages {
+    int32 count = 1;
 }
 
-message StringReply {
-  string message = 1;
+message StringMessage {
+    string message = 1;
 }

@@ -1,8 +1,13 @@
+IP=10.254.0.166
+
 all:
 
 apk:
 	flutter build apk
 
-compile-proto:
+protogen:
 	mkdir -p lib/src/generated
 	protoc --dart_out=grpc:lib/src/generated -Iprotos protos/service.proto
+
+rundebug:
+	~/go/bin/grpcui  -import-path $(shell pwd)/protos -proto $(shell pwd)/protos/service.proto -plaintext $(IP):50051
